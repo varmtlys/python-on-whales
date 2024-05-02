@@ -41,8 +41,11 @@ class DiskFreeResult:
 
 
 class SystemCLI(DockerCLICaller):
-    def disk_free(self) -> DiskFreeResult:
+    def disk_free(self, verbose: bool = False) -> DiskFreeResult:
         """Give information about the disk usage of the Docker daemon.
+
+        Parameters:
+            verbose: Show all df data for all docker components
 
         Returns a `python_on_whales.DiskFreeResult` object.
 
@@ -65,6 +68,7 @@ class SystemCLI(DockerCLICaller):
         """
 
         full_cmd = self.docker_cmd + ["system", "df", "--format", "{{json .}}"]
+        full_cmd.add_flag("--verbose", verbose)
         return DiskFreeResult(run(full_cmd))
 
     def events(
